@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>黃金價格變化</title>
+  <link rel="stylesheet" href="/style.css"> <!-- 使用相對於根目錄的路徑 -->
+</head>
+<body>
+<h1>黃金價格變化</h1>
+<div>
+  <!-- 查詢24K黃金價格的表單 -->
+  <form id="search">
+    <label for="GoldType">黃金類型：</label>
+    <select id="GoldType" name="GoldType">
+      <option value="gold24k">24K 黃金</option>
+    </select>
+    <input type="submit" value="查詢">
+  </form>
+  <table id="table">
+    <thead>
+    <tr>
+      <th>年份</th>
+      <th>價格 (每盎司)</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  const form = document.getElementById('search');
+  const table = document.getElementById('table').getElementsByTagName('tbody')[0];
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const GoldType = form.GoldType.value;
+    const response = await fetch(`/api?GoldType=${GoldType}`); // 確保這裡的路徑是正確的
+    const data = await response.json();
+    table.innerHTML = '';
+    data.forEach((item) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+                <td>${item.year}</td>
+                <td>${item.price}</td>
+            `;
+      table.appendChild(tr);
+    });
+  });
+</script>
+</body>
+</html>
